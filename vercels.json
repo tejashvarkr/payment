@@ -5,5 +5,11 @@
       "src": "api/donate.js",
       "use": "@vercel/node"
     }
+  ],
+  "routes": [
+    {
+      "src": "/api/donate",
+      "dest": "api/donate.js"
+    }
   ]
 }

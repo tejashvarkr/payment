@@ -1,0 +1,22 @@
+{
+  "name": "donation-api",
+  "version": "1.0.0",
+  "description": "A simple donation API with email notifications",
+  "main": "api/donate.js",
+  "scripts": {
+    "start": "node api/donate.js",
+    "dev": "nodemon api/donate.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "nodemailer": "^6.9.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "engines": {
+    "node": ">=14.x"
+  },
+  "author": "Your Name",
+  "license": "Me"
+}

@@ -15,8 +15,10 @@
     "nodemon": "^3.0.1"
   },
   "engines": {
-    "node": ">=14.x"
+    "node": "=22.x"
   },
   "author": "Your Name",
   "license": "Me"
 }
+
+

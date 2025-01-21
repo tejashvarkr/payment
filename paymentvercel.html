@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Donate Now</title>
+  <a href="index.html" class="home-link">Return to Home</a>
+
+  <style>
+    .home-link {
+  position: absolute;
+  top: 10px; /* Distance from the top of the page */
+  right: 10px; /* Distance from the right side */
+  text-decoration: none; /* Removes underline */
+  font-size: 16px; /* Adjust font size */
+  color: #007bff; /* Blue color for the link */
+  font-weight: bold; /* Bold text */
+}
+
+.home-link:hover {
+  color: #0056b3; /* Darker blue on hover */
+  text-decoration: underline; /* Add underline on hover */
+}
+
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f9f9f9;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      color: #007bff;
+    }
+
+    p {
+      font-size: 16px;
+    }
+
+    input, button {
+      padding: 6px;
+      font-size: 14px;
+      margin: 6px 0;
+      width: 100%;
+      border: 2px solid #ccc;
+      border-radius: 5px;
+    }
+
+    input::placeholder {
+      font-size: 12px;
+      color: #888;
+    }
+
+    input:focus {
+      border-color: #007bff;
+      outline: none;
+    }
+
+    button {
+      color: #fff;
+      background-color: #007bff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .message {
+      margin-top: 20px;
+      font-size: 18px;
+      color: #28a745;
+      font-weight: bold;
+    }
+
+    .payment-buttons {
+      margin-top: 20px;
+    }
+
+    .payment-buttons button {
+      margin: 10px 5px;
+      padding: 10px 20px;
+    }
+
+    .qr-code-container,
+    .upi-instructions,
+    .whatsapp-instructions {
+      margin-top: 20px;
+      display: none;
+    }
+
+    .popup-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      visibility: hidden;
+      opacity: 0;
+      transition: opacity 0.3s ease-in-out, visibility 0s linear 0.3s;
+    }
+
+    .popup-overlay.show {
+      visibility: visible;
+      opacity: 1;
+    }
+    input::placeholder {
+  font-size: 12px;
+  color: #888;
+}
+
+
+    .popup {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+      position: relative;
+      width: 400px;
+    }
+
+    .popup-close {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: red;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 25px;
+      height: 25px;
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .side-popup {
+      position: fixed;
+      right: -320px;
+      top: 20%;
+      width: 300px;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+      transition: right 0.5s ease-in-out;
+      text-align: center;
+    }
+
+    .side-popup.show {
+      right: 20px;
+    }
+
+    footer {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Main Announcement Popup -->
+  <div class="popup-overlay" id="popup">
+    <div class="popup">
+      <button class="popup-close" onclick="closePopup()">×</button>
+      <h2>🌟 Important Announcement</h2>
+      <p>Your donation can make a difference! Support our cause today.</p>
+    </div>
+  </div>
+
+  <!-- Side Popup -->
+  <div class="side-popup" id="sidePopup">
+    <button class="popup-close" onclick="closeSidePopup()">×</button>
+    <h2>🚀 Special Offer!</h2>
+    <p>Donate now and get a chance to be featured in our donor's hall of fame!</p>
+  </div>
+
+  <div class="container">
+    <h1>Support Our Cause</h1>
+    <p>Please fill out the form to proceed with your donation:</p>
+
+    <!-- Donation Form -->
+    <form id="donationForm">
+      <input type="text" id="name" placeholder="Your Name" required>
+      <input type="email" id="email" placeholder="Your Email" required>
+      <input type="number" id="amount" placeholder="Amount to Donate" min="1" required>
+      <input type="tel" id="phone" placeholder="Your Phone Number" pattern="[0-9]{10}" required>
+      <button type="submit">Proceed to Payment</button>
+    </form>
+
+    <!-- Payment Buttons -->
+    <div class="payment-buttons" id="paymentButtons" style="display: none;">
+      <button onclick="handlePayment('UPI')">Pay via UPI</button>
+      <button onclick="handlePayment('QR')">Pay via QR Code</button>
+      <button onclick="handlePayment('WhatsApp')">Pay via WhatsApp</button>
+    </div>
+   
+
+    <!-- QR Code Section -->
+    <div class="qr-code-container" id="qrCodeContainer">
+      <h2>Scan the QR Code to Pay:</h2>
+      <img id="qrCode" src="" alt="QR Code">
+    </div>
+
+    <!-- UPI Instructions -->
+    <div class="upi-instructions" id="upiInstructions">
+      <h2>UPI Payment Details:</h2>
+      <p>Use the following UPI link to make your payment:</p>
+      <a id="upiLink" href="#" target="_blank">UPI Payment Link</a>
+    </div>
+
+    <!-- WhatsApp Instructions -->
+    <div class="whatsapp-instructions" id="whatsappInstructions">
+      <h2>WhatsApp Payment Instructions:</h2>
+      <p>Click the link below to message us on WhatsApp:</p>
+      <a id="whatsappLink" href="#" target="_blank">Open WhatsApp</a>
+    </div>
+
+    <div id="referenceNumberSection" style="display: none;">
+      <input type="text" id="reference" name="reference" placeholder="Enter Payment Reference Number" required>
+      <button type="button" id="submitDonation">Submit Donation</button>
+
+    </div>
+
+    <!-- Positive Message Display -->
+    <div id="message" class="message"></div>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Support Our Cause. All Rights Reserved.</p>
+  </footer>
+
+  <script>
+    // Show the main popup when the page loads
+    window.onload = function () {
+      document.getElementById('popup').classList.add('show');
+
+      // Show the side popup after 5 seconds
+      setTimeout(function () {
+        const sidePopup = document.getElementById('sidePopup');
+        sidePopup.classList.add('show');
+
+        // Hide the side popup after 10 seconds
+        setTimeout(function () {
+          sidePopup.classList.remove('show');
+        }, 10000);
+      }, 5000);
+    };
+
+    // Close the main popup
+    function closePopup() {
+      document.getElementById('popup').classList.remove('show');
+    }
+
+    // Close the side popup
+    function closeSidePopup() {
+      document.getElementById('sidePopup').classList.remove('show');
+    }
+
+    // Show payment buttons after form submission
+    document.getElementById('donationForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      document.getElementById('paymentButtons').style.display = 'block';
+    });
+
+    // Handle payment method
+    function handlePayment(method) {
+      const name = document.getElementById('name').value;
+      const amount = document.getElementById('amount').value;
+
+      if (!name || !amount) {
+        alert('Please fill out the form first.');
+        return;
+      }
+
+      // Clear existing instructions
+      document.getElementById('qrCodeContainer').style.display = 'none';
+      document.getElementById('upiInstructions').style.display = 'none';
+      document.getElementById('whatsappInstructions').style.display = 'none';
+    
+      document.getElementById('donationForm').dataset.paymentMethod = method;
+
+  // Optionally, show a message for the selected payment method
+  document.getElementById('message').textContent = `You have selected ${method}. Please enter your payment reference number.`;
+
+      if (method === 'QR') {
+        const qrData = `upi://pay?pa=tejashwinikr2005-1@okicici&pn=${encodeURIComponent(name)}&am=${amount}&tn=Donation`;
+        const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(qrData)}&size=200x200`;
+
+        const qrCodeImg = document.getElementById('qrCode');
+        qrCodeImg.src = qrCodeUrl;
+
+        document.getElementById('qrCodeContainer').style.display = 'block';
+        document.getElementById('message').textContent = `Thank you for your donation!`;
+        document.getElementById('referenceNumberSection').style.display = 'block';
+      } else if (method === 'UPI') {
+        const upiLink = `upi://pay?pa=tejashwinikr2005-1@okicici&pn=${encodeURIComponent(name)}&am=${amount}&tn=Donation`;
+        document.getElementById('upiLink').href = upiLink;
+        document.getElementById('upiInstructions').style.display = 'block';
+        document.getElementById('message').textContent = `Thank you for your donation! .`;
+        document.getElementById('referenceNumberSection').style.display = 'block';
+      } else if (method === 'WhatsApp') {
+        const whatsappMsg = `Hello, I am ${name}. I want to donate ₹${amount}.`;
+        const whatsappUrl = `https://wa.me/9345360363?text=${encodeURIComponent(whatsappMsg)}`;
+
+        const whatsappLink = document.getElementById('whatsappLink');
+        whatsappLink.href = whatsappUrl;
+
+        document.getElementById('whatsappInstructions').style.display = 'block';
+        document.getElementById('message').textContent = `Thank you for your donation!.`;
+        document.getElementById('referenceNumberSection').style.display = 'block';
+      }
+   
+    }
+  </script>
+  <script>
+    document.getElementById('submitDonation').addEventListener('click', async function () {
+      const submitButton = document.getElementById('submitDonation');
+  submitButton.disabled = true;  // ✅ Prevent double submission
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const amount = document.getElementById('amount').value;
+      const phone = document.getElementById('phone').value;
+      const reference = document.getElementById('reference').value;
+  
+      if (!name || !email || !amount || !phone || !reference) {
+        alert('Please fill out all fields.');
+        submitButton.disabled = false; 
+        return;
+      }
+  
+      const donationData = {
+        name,
+        email,
+        amount,
+        phone,
+        reference,
+      };
+  
+      try {
+        const response = await fetch('/api/donate', {
+  method: 'POST',
+  mode: 'cors',  // Ensures CORS requests work
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify(donationData)
+});
+      
+        if (response.ok) {
+          alert('Thank you for your donation! Confirmation email has been sent.');
+          // Optionally clear form
+          document.getElementById('donationForm').reset();
+          document.getElementById('reference').value = '';
+        } else {
+          alert('There was an issue processing your donation. Please try again.');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Error connecting to the server. Please try again later.');
+      }
+      finally {
+    submitButton.disabled = false;  // ✅ Ensure button is re-enabled after request completes
+  }
+    });
+  </script>
+</body>
+</html>
+

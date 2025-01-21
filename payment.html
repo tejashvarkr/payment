@@ -338,6 +338,7 @@
       const amount = document.getElementById('amount').value;
       const phone = document.getElementById('phone').value;
       const reference = document.getElementById('reference').value;
+      
   
       if (!name || !email || !amount || !phone || !reference) {
         alert('Please fill out all fields.');
@@ -345,13 +346,7 @@
         return;
       }
   
-      const donationData = {
-        name,
-        email,
-        amount,
-        phone,
-        reference,
-      };
+     
   
       try {
         const response = await fetch('/api/donate', {
@@ -360,7 +355,7 @@
   headers: {
     'Content-Type': 'application/json'
   },
-  body: JSON.stringify(donationData)
+  body: JSON.stringify(name, email, amount, phone, reference )
 });
       
         if (response.ok) {

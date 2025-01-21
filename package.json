@@ -1,8 +1,8 @@
 {
-  "name": "donation-api",
+  "name": "api",
   "version": "1.0.0",
   "description": "A simple donation API with email notifications",
-  "main": "/api/donate.js",
+  "main": "api/donate.js",
   "scripts": {
     "start": "node api/donate.js",
     "dev": "nodemon api/donate.js"
